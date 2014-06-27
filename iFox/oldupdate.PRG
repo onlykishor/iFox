@@ -1,0 +1,1325 @@
+#DEFINE LOG_FILE 'update.log'
+LOCAL lcSQL, lnReturn
+
+*!*	cn = SQLCONNECT('RemoteData','sa','')
+cn = GetSQLHandle()
+IF cn <= 0
+	=MESSAGEBOX('Connection to server failed! Please contact your administrator.',16,'Message')
+	RETURN
+ENDIF
+
+*!*	lcSQL = "use ifox"
+*!*	lnReturn = SQLEXEC(cn, lcSQL)
+
+
+*** ADD TABLE - AUTOSUBJECTS
+lcSQL = "CREATE TABLE [autosubjects] (" + ;
+	"[rowid] [int] NOT NULL ," + ;
+	"[subject] [char] (20) NULL ," + ;
+	"[shortname] [char] (10) NULL ," + ;
+	"[maxmarks] [int] NULL ," + ;
+	"[minmarks] [float] NULL ," + ;
+	"[total] [bit] NULL ," + ;
+	"[selected] [bit] NULL " + ;
+") "
+
+lnReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE [autosubjects] WITH NOCHECK ADD " + ;
+	"CONSTRAINT [DF_autosubjects_total] DEFAULT (1) FOR [total], " + ;
+	"CONSTRAINT [DF_autosubjects_selected] DEFAULT (0) FOR [selected]"
+
+lnReturn = SQLEXEC(cn, lcSQL)
+
+*** MODIFY TABLE - OPTIONS
+lcSQL = "ALTER TABLE OPTIONS ADD printranks integer"
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** MODIFY TABLE - REGISTER
+lcSQL = "ALTER TABLE register ADD notes text "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ADD shortname char(15) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ADD email char(80) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ADD mobile char(60) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ADD feetype tinyint"
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ALTER COLUMN class char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ALTER COLUMN prevschool char(100) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ALTER COLUMN idmark1 char(100) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ALTER COLUMN idmark2 char(100) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE register ADD subcaste char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD studenttype char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD hosteltype char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD sscnum char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD sscyear char(4)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD sscmarks int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD sscdivision char(10)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD internum char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD interyear char(4)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD intermarks int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD interdivision char(10)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD sscmemo bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD intermemo bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD ccstudycert bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD castecert bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD incomecert bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD eamcetrankcard bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD eamcethtkt bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD regdnum char(30)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD sscpercent float"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD interpercent float"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ALTER COLUMN name char(40) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ALTER COLUMN father char(40) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD house char(10) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD activity char(20) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD iitcoaching char(1) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD rollnum int "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD optional char(10) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD studyyear int "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD stdue float "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD pmdue float "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE register ADD newadm bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+*!*	lcSQL = "ALTER TABLE attendance ALTER COLUMN class nchar(20)"
+*!*	lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE admflds ADD expression char(100)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "UPDATE admflds SET expression = fieldname WHERE expression IS NULL OR expression = ''"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE duedates ALTER COLUMN class char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE enq ALTER COLUMN class char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE fee ALTER COLUMN class char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE grades ALTER COLUMN class char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE marks ALTER COLUMN class char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE subjects ALTER COLUMN class char(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+
+
+*** ADD TABLE - FEETEMP
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[feetemp](
+	[feeid] [int] NOT NULL,
+	[name] [char](50) NOT NULL,
+	[amount] [float] NULL CONSTRAINT [DF_feetemp_amount]  DEFAULT ((0)),
+	[checked] [bit] NULL CONSTRAINT [DF_feetemp_checked]  DEFAULT ((0))
+) 
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** MODIFY TABLE - OPTIONS - ADD CUSTOMIZED REPORT HEADER N FOOTER FIELDS TO OPTIONS
+TEXT TO lcSQL NOSHOW
+ALTER TABLE options ADD repc1head TEXT, repc1foot TEXT
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+ALTER TABLE options ADD billheader TEXT, billfooter TEXT
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** CREATE SETTINGS TABLE
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[settings] (
+	[pkey] [int] NOT NULL ,
+	[settingname] [char] (100) NOT NULL ,
+	[settingvalue] [char] (50) NOT NULL ,
+	[description] [nchar] (200) NOT NULL ,
+	[useraccess] [char] (1) NOT NULL 
+) 
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE settings ALTER COLUMN settingvalue char(200)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** MODIFY TABLE - RMODELS
+lcSQL = "ALTER TABLE rmodels ADD repname char(100)"
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** MODIFY TABLE - HEADS
+lcSQL = "ALTER TABLE heads ADD base bit"
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE heads ADD rootid int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** ADD TABLE - STUDENTFEE
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[studentfee](
+	[rowid] [int] NOT NULL,
+	[registerid] [int] NOT NULL,
+	[admno] [int] NOT NULL,
+	[feeid] [int] NOT NULL,
+	[amount] [float] NOT NULL,
+	[duedate] [datetime] NULL,
+	[remarks] [nchar](30) NULL
+)
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[msgcontrol](
+	[srvid] [tinyint] NOT NULL,
+	[srvstatus] [nchar](10) NOT NULL,
+	[srvmessage] [nchar](100) NULL,
+	[comport] [nchar](10) NULL,
+	[baud] [nchar](10) NULL
+) 
+ENDTEXT 
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE msgcontrol ALTER COLUMN baud char(20) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE msgcontrol ADD smspause int "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE msgcontrol ADD sendoption nchar(10) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE msgcontrol ADD provider nchar(100) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE msgcontrol ADD username nchar(30) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE msgcontrol ADD passwd nchar(30) "
+lReturn = SQLEXEC(cn, lcSQL)
+lcSQL = "ALTER TABLE msgcontrol ADD serviceurl nchar(200) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[msgoutbox](
+	[msgid] [int] NOT NULL,
+	[msgdate] [datetime] NOT NULL,
+	[recipient] [nchar](80) NOT NULL,
+	[message] [nchar](200) NOT NULL,
+	[status] [nchar](10) NOT NULL
+) 
+ENDTEXT 
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[msgsent](
+	[msgid] [bigint] IDENTITY(1,1) NOT NULL,
+	[msgdate] [datetime] NOT NULL,
+	[recipient] [nchar](80) NOT NULL,
+	[message] [nchar](200) NOT NULL,
+	[status] [nchar](10) NOT NULL,
+	[sentdate] [datetime] NULL,
+	[retries] [tinyint] NULL
+) 
+ENDTEXT 
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** MODIFY TABLE - ADDRESS
+lcSQL = "ALTER TABLE address ADD groupname nchar(30)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE address ADD title nchar(6)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE address ADD company nchar(30)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [tc](
+	[tcnum] [int] NOT NULL,
+	[tcdate] [datetime] NULL,
+	[tcappldate] [datetime] NULL,
+	[admno] [int] NULL,
+	[name] [char](35) NULL,
+	[father] [char](30) NULL CONSTRAINT [DF_tc_father]  DEFAULT (''),
+	[dob] [datetime] NULL,
+	[religion] [char](10) NULL CONSTRAINT [DF_tc_religion]  DEFAULT (' '),
+	[caste] [char](5) NULL CONSTRAINT [DF_tc_caste]  DEFAULT (''),
+	[subcaste] [char](20) NULL CONSTRAINT [DF_tc_subcaste]  DEFAULT (''),
+	[leavingclass] [char](10) NULL CONSTRAINT [DF_tc_leavingclass]  DEFAULT (''),
+	[subjects] [char](45) NULL CONSTRAINT [DF_tc_subjects]  DEFAULT (''),
+	[medium] [char](7) NULL CONSTRAINT [DF_tc_medium]  DEFAULT (''),
+	[doa] [datetime] NULL,
+	[yearjoined] [int] NULL,
+	[class] [char](10) NULL CONSTRAINT [DF_tc_class]  DEFAULT (''),
+	[leavingdate] [datetime] NULL,
+	[leavingreason] [char](35) NULL CONSTRAINT [DF_tc_leavingreason]  DEFAULT (''),
+	[idmark1] [char](45) NULL CONSTRAINT [DF_tc_idmark1]  DEFAULT (''),
+	[idmark2] [char](45) NULL CONSTRAINT [DF_tc_idmark2]  DEFAULT (''),
+	[tctype] [tinyint] NULL,
+	[selected] [bit] NULL,
+	[qualified] [char](60) NULL CONSTRAINT [DF_tc_qualified]  DEFAULT (''),
+	[studyyear] [int] NULL,
+	[registerid] [int] NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[attendance](
+	[rowid] [int] NOT NULL,
+	[registerid] [int] NOT NULL,
+	[attdate] [datetime] NOT NULL,
+	[admno] [int] NOT NULL,
+	[class] [nchar](20) NULL,
+	[status] [int] NOT NULL,
+	[rsncode] [int] NULL,
+	[userid] [int] NOT NULL,
+	[entrydate] [datetime] NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+* Modules table - SMS security field
+lcSQL = "ALTER TABLE modules ADD cansms bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+* enq table - mobile field
+lcSQL = "ALTER TABLE enq ADD mobile nchar(15)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+* voucher table - registerid field
+lcSQL = "ALTER TABLE voucher ADD registerid int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+
+*** ADD TABLE - BOOKS
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[books](
+	[bookid] [int] NOT NULL,
+	[subjectcode] [char](3) NULL,
+	[author] [char](35) NULL,
+	[title] [char](100) NULL,
+	[publisher] [text] NULL,
+	[pur_date] [datetime] NULL,
+	[price] [float] NULL,
+	[bookinfo] [text] NULL,
+	[grants] [char](20) NULL,
+	[classification] [char](10) NULL,
+	[isbn] [char](15) NULL,
+	[discarded] [bit] NULL,
+	[discdate] [datetime] NULL,
+	[disctype] [tinyint] NULL,
+	[billno] [char](5) NULL,
+	[remarks] [char](30) NULL,
+	[status] [bit] NULL,
+	[source] [char](25) NULL,
+	[invno] [char](6) NULL
+)
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE books ALTER COLUMN author char(100) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE books ADD pubyear int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE books ADD edition nchar(10)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE books ADD discount nchar(10)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE books ADD pages int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE books ALTER COLUMN pages nchar(20)"
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** ADD TABLE - ISSUES
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[issues](
+	[issueid] [int] NOT NULL,
+	[issuedate] [datetime] NOT NULL,
+	[admno] [int] NULL DEFAULT ((0)),
+	[card] [tinyint] NULL DEFAULT ((0)),
+	[bookid] [int] NULL DEFAULT ((0)),
+	[returned] [bit] NULL DEFAULT ((0)),
+	[retdate] [datetime] NULL,
+	[fine] [float] NULL DEFAULT ((0)),
+	[remarks] [char](10) NULL
+)
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** ADD TABLE - EVENTLOG
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[eventlog](
+	[logid] [int] IDENTITY(1,1) NOT NULL,
+	[logdate] [datetime] NOT NULL,
+	[userid] [int] NOT NULL,
+	[logaction] [char](10) NOT NULL,
+	[logdescr] [char](100) NULL
+)
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*** ADD DMS TABLE - documents
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[documents](
+	[docid] [int] NOT NULL,
+	[context] [nchar](30) NULL,
+	[groupname] [nchar](50) NULL,
+	[description] [nchar](150) NULL,
+	[filename] [nchar](100) NULL,
+	[filetype] [nchar](6) NULL,
+	[filedata] [varbinary](max) NOT NULL,
+	[fdatetime] [datetime] NULL,
+	[filesize] [float] NULL,
+	[userid] [int] NULL,
+	[shared] [bit] NULL,
+	[lastmod] [datetime] NULL,
+	[rootid] [int] NULL,
+	[admno] [int] NULL
+) 
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+* documents
+lcSQL = "ALTER TABLE documents ADD admno int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+
+*** ADD TABLE - notes
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[notes](
+	[noteid] [int] NOT NULL,
+	[entrydate] [datetime] NOT NULL,
+	[userid] [int] NULL,
+	[note] [nvarchar](max) NULL,
+	[context] [nchar](10) NOT NULL,
+	[lastmod] [datetime] NOT NULL
+) 
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE fee ADD paidamount float NULL"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE fee ADD balance float NULL"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE fee ADD userid int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+*-- delete - msgsent table update trigger
+TEXT TO lcSQL NOSHOW
+IF OBJECT_ID ('trUpdMoveSentToOutBox', 'TR') IS NOT NULL
+   DROP TRIGGER trUpdMoveSentToOutBox;
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+*-- msgsent table update trigger
+TEXT TO lcSQL NOSHOW
+CREATE TRIGGER trUpdMoveSentToOutBox
+ON msgoutbox
+AFTER UPDATE
+AS
+
+SET NOCOUNT ON
+INSERT INTO
+	msgsent
+	(msgdate, recipient, message, status, sentdate, retries)
+SELECT msgdate, recipient, message, status, getdate(), 1
+  FROM inserted
+ WHERE status = 'SENT'
+
+DELETE FROM msgoutbox 
+ WHERE msgid IN (SELECT msgid 
+                   FROM inserted 
+                  WHERE status = 'SENT')
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE registers ALTER COLUMN name char(60) "
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[workingdays](
+	[rowid] [int] IDENTITY(1,1) NOT NULL,
+	[registerid] [tinyint] NOT NULL,
+	[class] [char](20) NOT NULL,
+	[jan] [tinyint] NULL,
+	[feb] [tinyint] NULL,
+	[mar] [tinyint] NULL,
+	[apr] [tinyint] NULL,
+	[may] [tinyint] NULL,
+	[jun] [tinyint] NULL,
+	[jul] [tinyint] NULL,
+	[aug] [tinyint] NULL,
+	[sep] [tinyint] NULL,
+	[oct] [tinyint] NULL,
+	[nov] [tinyint] NULL,
+	[dec] [tinyint] NULL,
+	[classid] [int] NULL,
+	[subjectid] [int] NULL
+)
+ENDTEXT
+
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[feetemplates](
+	[templateid] [int] NOT NULL,
+	[registerid] [int] NOT NULL,
+	[templatename] [char](50) NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[feetemplatedetail](
+	[rowid] [int] IDENTITY(1,1) NOT NULL,
+	[templateid] [int] NOT NULL,
+	[sequence] [int] NOT NULL,
+	[feeid] [int] NOT NULL,
+	[amount] [float] NOT NULL,
+	[duedate] [datetime] NULL,
+	[remarks] [char](30) NULL,
+	[selected] [bit] NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+* holidays table
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[holidays](
+	[rowid] [int] IDENTITY(1,1) NOT NULL,
+	[registerid] [int] NOT NULL,
+	[holidaydate] [datetime] NOT NULL,
+	[description] [char](50) NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+* add rowid column to vouchers table
+lcSQL = "SELECT * FROM voucher WHERE 1=2"
+lReturn = SQLEXEC(cn, lcSQL, 'output') > 0
+IF lReturn AND USED('output')
+	SELECT output
+	IF FSIZE('rowid','output') = 0
+		lcSQL = "ALTER TABLE voucher ADD rowid int"
+		lReturn = SQLEXEC(cn, lcSQL)
+		
+		* update rowid
+		TEXT TO lcSQL NOSHOW 
+		UPDATE voucher
+		   SET rowid = r.RowNumber
+		  FROM voucher v
+		  JOIN (SELECT ROW_NUMBER() OVER (ORDER BY Date) AS 'RowNumber', * FROM voucher) r
+		    ON v.vrno = r.vrno
+		ENDTEXT 
+		lReturn = SQLEXEC(cn, lcSQL)
+		
+	ENDIF
+	USE IN SELECT('output')
+ENDIF
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[bills](
+	[billno] [int] NOT NULL,
+	[date] [datetime] NOT NULL,
+	[name] [char](40) NULL CONSTRAINT [DF_bills_name]  DEFAULT (''),
+	[total] [float] NOT NULL CONSTRAINT [DF_bills_total]  DEFAULT (0),
+	[discount] [float] NULL CONSTRAINT [DF_bills_discount]  DEFAULT (0),
+	[amount] [float] NOT NULL CONSTRAINT [DF_bills_amount]  DEFAULT (0),
+	[cons] [float] NULL CONSTRAINT [DF_bills_cons]  DEFAULT (0),
+	[vat] [float] NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE bills ADD admno int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[billdetails](
+	[rowid] [int] NOT NULL,
+	[referer] [int] NOT NULL CONSTRAINT [DF_billdetails_referer]  DEFAULT (0),
+	[billno] [int] NOT NULL CONSTRAINT [DF_billdetails_billno]  DEFAULT (0),
+	[itemid] [int] NULL,
+	[productid] [int] NOT NULL CONSTRAINT [DF_billdetails_productid]  DEFAULT (0),
+	[qty] [int] NOT NULL CONSTRAINT [DF_billdetails_qty]  DEFAULT (0),
+	[rate] [float] NOT NULL CONSTRAINT [DF_billdetails_rate]  DEFAULT (0),
+	[total] [float] NOT NULL CONSTRAINT [DF_billdetails_total]  DEFAULT (0)
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[billtemp](
+	[rowid] [int] NOT NULL,
+	[billno] [int] NOT NULL,
+	[productid] [int] NOT NULL,
+	[mfr] [char](5) NULL,
+	[code] [char](10) NULL,
+	[packing] [char](6) NULL,
+	[batchno] [char](10) NULL,
+	[expirydate] [datetime] NULL,
+	[qty] [int] NOT NULL,
+	[free] [int] NULL,
+	[rate] [float] NOT NULL,
+	[mrp] [float] NULL,
+	[total] [float] NOT NULL,
+	[referer] [int] NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[groups](
+	[groupid] [int] NOT NULL,
+	[name] [char](20) NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[invoice](
+	[invoiceid] [int] NOT NULL,
+	[supplierid] [int] NOT NULL,
+	[invoiceno] [char](10) NULL,
+	[date] [datetime] NULL,
+	[total] [float] NULL,
+	[discount] [float] NULL,
+	[amount] [float] NULL,
+	[sno] [int] NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[invoicedetails](
+	[rowid] [int] NOT NULL,
+	[invoiceid] [int] NOT NULL,
+	[productid] [int] NOT NULL,
+	[mfr] [char](5) NULL,
+	[batchno] [char](10) NULL CONSTRAINT [DF_invoicedetails_batchno]  DEFAULT (''),
+	[expirydate] [datetime] NULL,
+	[qty] [int] NOT NULL CONSTRAINT [DF_invoicedetails_qty]  DEFAULT (0),
+	[free] [int] NULL CONSTRAINT [DF_invoicedetails_free]  DEFAULT (0),
+	[rate] [float] NOT NULL CONSTRAINT [DF_invoicedetails_rate]  DEFAULT (0),
+	[mrp] [float] NOT NULL CONSTRAINT [DF_invoicedetails_mrp]  DEFAULT (0),
+	[total] [float] NULL CONSTRAINT [DF_invoicedetails_total]  DEFAULT (0),
+	[sold] [int] NULL CONSTRAINT [DF_invoicedetails_sold]  DEFAULT (0)
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[preturn_details](
+	[rowid] [int] NOT NULL,
+	[retno] [int] NOT NULL,
+	[productid] [int] NOT NULL,
+	[qty] [int] NOT NULL,
+	[free] [int] NULL,
+	[rate] [float] NULL,
+	[total] [float] NULL,
+	[referer] [int] NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[preturns](
+	[retno] [int] NOT NULL,
+	[supplierid] [int] NOT NULL,
+	[date] [datetime] NOT NULL,
+	[narration] [char](50) NULL,
+	[total] [float] NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[products](
+	[productid] [int] NOT NULL,
+	[groupid] [int] NULL,
+	[productcode] [char](10) NULL,
+	[name] [char](25) NOT NULL,
+	[packing] [char](6) NULL,
+	[price] [numeric](5, 2) NULL,
+	[opening] [int] NULL,
+	[sale] [int] NULL,
+	[balance] [int] NULL,
+	[dropped] [bit] NULL CONSTRAINT [DF_products_dropped]  DEFAULT (0)
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[sreturn_details](
+	[rowid] [int] NOT NULL,
+	[retno] [int] NOT NULL,
+	[productid] [int] NOT NULL,
+	[qty] [int] NOT NULL,
+	[rate] [float] NOT NULL,
+	[amount] [float] NOT NULL,
+	[referer] [int] NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[sreturns](
+	[retno] [int] NOT NULL,
+	[date] [datetime] NOT NULL,
+	[amount] [float] NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[suppliers](
+	[supplierid] [int] NOT NULL,
+	[supplier] [char](25) NOT NULL,
+	[address] [text] NULL,
+	[contactname] [char](30) NULL,
+	[phone] [char](10) NULL,
+	[tin] [char](20) NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[templates](
+	[templateid] [int] IDENTITY(1,1) NOT NULL,
+	[context] [char](30) NOT NULL,
+	[active] [bit] NOT NULL,
+	[name] [char](50) NOT NULL,
+	[description] [char](100) NOT NULL,
+	[message] [char](200) NOT NULL,
+	[userid] [int] NOT NULL,
+	[createdon] [datetime] NOT NULL,
+	[lastmod] [datetime] NULL,
+	[lastmoduser] [int] NULL
+) 
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE attendance ADD hr1 bit, hr2 bit, hr3 bit, hr4 bit, hr5 bit, hr6 bit, hr7 bit, hr8 bit, hr9 bit"
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE attendance ADD ptotal int, wtotal int"
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[employee](
+	[empid] [int] NOT NULL,
+	[sno] [int] NULL,
+	[groupid] [int] NOT NULL,
+	[name] [char](25) NOT NULL,
+	[dob] [datetime] NULL,
+	[address] [text] NULL,
+	[phones] [char](10) NULL,
+	[mobile] [char](10) NULL,
+	[qualification] [text] NULL,
+	[experience] [text] NULL,
+	[doj] [datetime] NULL,
+	[desig] [char](15) NULL,
+	[dept] [char](15) NULL,
+	[type] [tinyint] NULL,
+	[parttime] [tinyint] NULL,
+	[accnum] [char](15) NULL,
+	[pfnumber] [char](10) NULL,
+	[pan] [char](15) NULL,
+	[scale] [tinyint] NULL,
+	[basic] [float] NULL,
+	[fpi] [float] NULL,
+	[sp] [float] NULL,
+	[da] [float] NULL,
+	[hra] [float] NULL,
+	[others] [float] NULL,
+	[gross] [float] NULL,
+	[pfund] [float] NULL,
+	[pfloan] [float] NULL,
+	[lic] [float] NULL,
+	[itax] [float] NULL,
+	[ptax] [float] NULL,
+	[gslis] [float] NULL,
+	[other] [float] NULL,
+	[total] [float] NULL,
+	[ppay] [float] NULL,
+	[allowance] [float] NULL,
+	[epf] [float] NULL,
+	[mgmt] [float] NULL,
+	[loan1] [float] NULL,
+	[loan2] [float] NULL,
+	[netsal] [float] NULL,
+	[cleaves] [float] NULL,
+	[eleaves] [float] NULL,
+	[sleaves] [float] NULL,
+	[oleaves] [float] NULL,
+	[dropped] [bit] NULL,
+	[photo] [image] NULL,
+	[incrdate] [char](10) NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[emptrans](
+	[slipnum] [int] NOT NULL,
+	[sno] [int] NULL,
+	[empid] [int] NOT NULL,
+	[groupid] [int] NOT NULL,
+	[month] [char](10) NOT NULL,
+	[wdays] [int] NULL,
+	[paydate] [datetime] NULL,
+	[amount] [float] NULL,
+	[basic] [float] NULL,
+	[fpi] [float] NULL,
+	[sp] [float] NULL,
+	[da] [float] NULL,
+	[hra] [float] NULL,
+	[others] [float] NULL,
+	[gross] [float] NULL,
+	[pfund] [float] NULL,
+	[pfloan] [float] NULL,
+	[lic] [float] NULL,
+	[itax] [float] NULL,
+	[ptax] [float] NULL,
+	[gslis] [float] NULL,
+	[other] [float] NULL,
+	[total] [float] NULL,
+	[ppay] [float] NULL,
+	[allowance] [float] NULL,
+	[epf] [float] NULL,
+	[mgmt] [float] NULL,
+	[loan1] [float] NULL,
+	[loan2] [float] NULL,
+	[netsalary] [float] NULL,
+	[particulars] [char](60) NULL,
+	[tchtrust] [float] NULL,
+	[tchassn] [float] NULL,
+	[ntstrust] [float] NULL,
+	[ntsassn] [float] NULL,
+	[bankloan] [float] NULL,
+	[totalded] [float] NULL,
+	[salarybal] [float] NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[groups](
+	[groupid] [int] NOT NULL,
+	[name] [char](50) NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE eventlog ALTER COLUMN logdescr char(150) "
+lReturn = SQLEXEC(cn, lcSQL)
+=AddSQLColumn('eventlog','module','char(100)')
+=AddSQLColumn('eventlog','registerid','int')
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[classes](
+	[classid] [int] NOT NULL,
+	[registerid] [int] NOT NULL,
+	[sequence] int NULL,
+	[classname] [char](5) NULL,
+	[subjects] [char](100) NULL,
+	[shortname] [char](10) NOT NULL,
+	[duration] int NULL,
+	[active] tinyint NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+=AddSQLColumn('classes','description','char(100)')
+=AddSQLColumn('classes','rowid','int')
+
+=AddSQLColumn('issues','registerid','int')
+
+=AddSQLColumn('register','semester','char(10)')
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[AttSubjects](
+	[rowid] [int] IDENTITY(1,1) NOT NULL,
+	[registerid] [int] NOT NULL,
+	[class] [char](20) NOT NULL,
+	[studyyear] [int] NULL,
+	[semester] [char](10) NULL,
+	[colid] [int] NULL,
+	[colname] [char](10) NULL,
+	[coldesc] [char](20) NULL
+) 
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+=AddSQLColumn('attsubjects','colcode','char(4)')
+=AddSQLColumn('attendance','studyyear','int',0)
+=AddSQLColumn('attendance','semester','char(10)',' ')
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[SysReports](
+	[rowid] [int] IDENTITY(1,1) NOT NULL,
+	[registerid] [int] NOT NULL,
+	[reporttype] [char](10) NOT NULL,
+	[reportname] [char](30) NULL,
+	[reportfile] [char](200) NOT NULL
+) 
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+=AddSQLColumn('msgcontrol','balanceurl','char(200)',' ')
+=AddSQLColumn('feetypes','headid','int')
+=AddSQLColumn('feetypes','groupid','int')
+=AddSQLColumn('studentfee','addnlfee','tinyint')
+=AddSQLColumn('bills','registerid','int')
+
+*-- voucher
+=AddSQLColumn('voucher','userid','int',0)
+=AddSQLColumn('voucher','lastmod','datetime')
+=AddSQLColumn('voucher','approveid','int',2)
+=AddSQLColumn('voucher','approvedate','datetime')
+=AddSQLColumn('voucher','remarks','varchar(MAX)',' ')
+*== voucher
+
+=AddSQLColumn('modules','vouchlimit','float',0)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[reason](
+	[rowid] [int] NOT NULL,
+	[reason] [char](50) NOT NULL,
+	[module] [char](30) NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+=AddSQLColumn('books','author2','char(100)','')
+=AddSQLColumn('books','supplier','char(50)','')
+=AddSQLColumn('books','invdate','datetime')
+
+=AddSQLColumn('subjects','testdate','datetime')
+=AddSQLColumn('subjects','duration','char(5)')
+
+* 13-Mar-2012 
+=AddSQLColumn('books','isbn13','char(13)','')
+
+*-- 14-Mar-2012
+=AddSQLColumn('heads','category','char(10)','')		&& Automobile/Insurance/Loan/Deposit
+=AddSQLColumn('heads','regnum','char(20)','')		&& Registration Number
+=AddSQLColumn('heads','vehtype','char(20)','')		&& Vehicle Type (Van/Mini Bus)
+=AddSQLColumn('heads','model','char(20)','')		&& Model (TATA/Mahindra)
+=AddSQLColumn('heads','make','char(10)','')			&& Make/Year of Manufacturing
+=AddSQLColumn('heads','inscomp','char(30)','')		&& Insurance Company
+=AddSQLColumn('heads','insprem','float',0)			&& Insurance Premium Amount
+=AddSQLColumn('heads','insdate','datetime')			&& Insurance DateTime
+=AddSQLColumn('heads','insrenew','datetime')		&& Insurance Renewal Date
+=AddSQLColumn('heads','pollcheck','datetime')		&& Pollution check date
+=AddSQLColumn('heads','pollrenew','datetime')		&& Pollution check Renewal Date
+
+=AddSQLColumn('heads','createdon','datetime')		&& Record Creation Date
+=AddSQLColumn('heads','userid','int',1)				&& Created User
+=AddSQLColumn('heads','lastmod','datetime')			&& Last Modified Date
+=AddSQLColumn('heads','lastmoduser','int',0)		&& Record Last Modified By
+*== 14-Mar-2012
+
+*-- 15-Mar-2012
+=AddSQLColumn('heads','active','tinyint',1)			&& Record Status 1-Active 0-Inactive
+=AddSQLColumn('heads','notes','text','')			&& Notes
+*== 15-Mar-2012
+
+*-- 20-Mar-2012
+lcSQL = "ALTER TABLE books ALTER COLUMN subjectcode char(12) "
+lReturn = SQLEXEC(cn, lcSQL)
+*== 20-Mar-2012
+
+*-- 3-Apr-2012
+* drop normal pkey column
+TEXT TO lcSQL TEXTMERGE NOSHOW
+ALTER TABLE settings DROP COLUMN pkey
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+* add identity pkey column
+TEXT TO lcSQL TEXTMERGE NOSHOW
+ALTER TABLE settings ADD pkey INT IDENTITY (1,1)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+*!*	=AddSQLColumn('settings','userid','int',1)			&& Record Status 1-Active 0-Inactive
+*!*	=AddSQLColumn('settings','lastmod','datetime')		&& last modified date time
+
+*AddSetting(settingname, settingvalue, description, useraccess)
+=AddSetting('DISPLAY_ROUTE_NAME_IN_DUES','N','Display Route Name in Dues Report.','N')
+=AddSetting('DISTRIBUTE_FEE_AMOUNT','N','Enable entering fee paid amount.','N')
+=AddSetting('ADD_STUDY_YEAR_TO_CLASS','N','Adds Study Year to class for college use.','N')
+=AddSetting('CUSTOM_WALLPAPER','','Application Wallpaper','N')
+*== 3-Apr-2012
+
+*-- 4-Apr-2012
+lcSQL = "ALTER TABLE templates ALTER COLUMN message char(254) "
+lReturn = SQLEXEC(cn, lcSQL)
+*== 4-Apr-2012
+
+*-- 23-Apr-2012
+=AddSQLColumn('tc','feedues','char(20)','')			&& Whether pupil has paid all fee dues...
+=AddSQLColumn('tc','medical','char(20)','')			&& Whether pupil has undergone medical...
+=AddSQLColumn('tc','conduct','char(20)','')			&& General progress and conduct
+=AddSQLColumn('tc','concession','char(20)','')		&& Scholarship/Concession
+*== 23-Apr-2012
+
+*-- 24-Apr-2012
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[studyconduct](
+	[certid] [int] NOT NULL,
+	[certtype] [tinyint] NOT NULL,
+	[certdate] [datetime] NOT NULL,
+	[admno] [int] NOT NULL,
+	[studyyear] [tinyint] NULL,
+	[registerid] [int] NOT NULL,
+	[userid] [int] NOT NULL,
+	[lastmod] [datetime] NOT NULL
+) 
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+=AddSQLColumn('options','website','char(60)','')		&& website
+=AddSQLColumn('options','email1','char(60)','')			&& e-mail 1
+=AddSQLColumn('options','email2','char(60)','')			&& e-mail 2
+=AddSQLColumn('options','email3','char(60)','')			&& e-mail 3
+=AddSQLColumn('options','ftpuser','char(30)','')		&& FTP user name
+=AddSQLColumn('options','ftppass','char(18)','')		&& FTP password
+=AddSQLColumn('options','logo','image')					&& logo
+*== 24-Apr-2012
+
+*-- 27-Apr-2012
+=AddSQLColumn('tc','regdnum','char(30)','')				&& register/pin number
+=AddSQLColumn('tc','registerid','int')
+=AddSQLColumn('tc','rowid','int')
+
+=AddSQLColumn('studyconduct','rowid','int')
+
+lcSQL = "ALTER TABLE classes ALTER COLUMN classname char(20) "
+lReturn = SQLEXEC(cn, lcSQL)
+*== 27-Apr-2012
+
+* 30-Apr-2012
+=AddSQLColumn('feetypes','studentacc','int',0)			&& Link to Pocket Money/Student Account
+
+*-- 8-May-2012
+=AddSQLColumn('options','mobile1','varchar(12)','')		&& mobile 1
+=AddSQLColumn('options','mobile2','varchar(12)','')		&& mobile 2
+=AddSQLColumn('options','mobile3','varchar(12)','')		&& mobile 3
+*== 8-May-2012
+
+*-- 6-Jun-2012
+=AddSQLColumn('options','astart','datetime')		&& Academic year start date
+=AddSQLColumn('options','aend','datetime')			&& Academic year end date
+=AddSQLColumn('options','pregisterid','int')		&& Previous register id
+*== 6-Jun-2012
+
+*-- 15-Jun-2012
+=AddSQLColumn('enq','status1','char(20)','')		&& Admission Status (DayScholar/DayBoarder/Hosteler)
+=AddSQLColumn('enq','transport','int',0)			&& Transport opted ?
+=AddSQLColumn('enq','stopid','int',0)				&& Pickup point
+*== 15-Jun-2012
+
+* 7-Sep-2012
+=AddSQLColumn('enq','studyyear','int',0)			&& study year
+
+* 28-Sep-2012
+=AddSQLColumn('feetemp','userid','int',0)			&& userid
+
+* 9-Mar-2013
+=AddSQLColumn('grades','points','int')				&& grade point
+
+* 27-MAY-2013
+=AddSQLColumn('options','grades','int',1)			&& use subject grades for points system
+
+* 2-JUN-2013
+=AddSetting('INVENTORY_STUDENT_ACC_LINK','N','Link Inventory Sales with Student Account','N')
+
+*--- 4-JUN-2013
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[productkits](
+	[kitid] [int] NOT NULL,
+	[name] [varchar](50) NOT NULL,
+	[active] [tinyint] NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+TEXT TO lcSQL NOSHOW
+CREATE TABLE [dbo].[productkitdetails](
+	[rowid] [int] NOT NULL,
+	[kitid] [int] NOT NULL,
+	[productid] [int] NOT NULL,
+	[qty] [int] NOT NULL,
+	[active] [tinyint] NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE products ALTER COLUMN price [numeric](10, 2) "
+lReturn = SQLEXEC(cn, lcSQL)
+*=== 4-JUN-2013
+
+*--- 7-JUN-2013
+lcSQL = "ALTER TABLE grades ALTER COLUMN range1 float "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE grades ALTER COLUMN range2 float "
+lReturn = SQLEXEC(cn, lcSQL)
+
+lcSQL = "ALTER TABLE grades ALTER COLUMN points float "
+lReturn = SQLEXEC(cn, lcSQL)
+*=== 7-JUN-2013
+
+* 21-OCT-2013
+=AddSQLColumn('routedates','amount','float')
+
+*--- 13-DEC-2013
+=AddSQLColumn('register','fqualification','char(15)','')
+=AddSQLColumn('register','bankac','char(15)','')
+=AddSQLColumn('register','bankbranch','char(15)','')
+=AddSQLColumn('register','ifsccode','char(11)','')
+*=== 13-DEC-2013
+
+*--- 26-DEC-2013
+TEXT TO lcSQL NOSHOW TEXTMERGE
+CREATE TABLE [dbo].[siblings](
+	[rowid] [int] IDENTITY(1,1) NOT NULL,
+	[registerid] [int] NOT NULL,
+	[admno] [int] NOT NULL,
+	[sadmno] [int] NOT NULL,
+	[relation] [char](10) NOT NULL
+)
+ENDTEXT
+lReturn = SQLEXEC(cn, lcSQL)
+*=== 26-DEC-2013
+
+*!*	TEXT TO lcSQL NOSHOW
+*!*	ENDTEXT
+*!*	lReturn = SQLEXEC(cn, lcSQL)
+*SQLDISCONNECT(cn)
+
+=MESSAGEBOX('update successful!', 64, 'Message')
+
+
+
+
+
+***************************************************
+* FUNCTIONS
+***************************************************
+
+* add column to table after checking the existance of the column
+FUNCTION AddSQLColumn
+LPARAMETERS pcTable, pcColumn, pcType, pcFill
+
+LOCAL lcSQL, lnReturn
+
+lcSQL = "SELECT * FROM " + pcTable + " WHERE 1=2"
+lnReturn = SQLEXEC(cn, lcSQL, 'output')
+IF lnReturn > 0 AND USED('output')
+	SELECT output
+	IF FSIZE(pcColumn,'output') = 0		&& column does not exist
+		lcSQL = "ALTER TABLE " + pcTable + " ADD " + pcColumn + " " + pcType
+		lnReturn = SQLEXEC(cn, lcSQL)
+
+		IF lnReturn = 1
+			* back fill
+			IF NOT ISNULL(pcFill)
+				lcSQL = TEXTMERGE("UPDATE <<pcTable>> SET <<pcColumn>> = <<pcFill>>")
+				lnReturn = SQLEXEC(cn, lcSQL)
+			ENDIF 
+		ELSE
+			=STRTOFILE(lcSQL + ' FAILED.', LOG_FILE, .t.)
+		ENDIF 
+	ENDIF
+	USE IN SELECT('output')
+ENDIF
+
+RETURN (lnReturn>0)
+
+
+* Check and add setting to settings table
+FUNCTION AddSetting
+LPARAMETERS pcSettingName, pcSettingValue, pcDescription, pcUserAccess
+LOCAL lnReturn, lcSQL
+llReturn = .t.
+
+TEXT TO lcSQL TEXTMERGE NOSHOW
+INSERT INTO settings (settingname, settingvalue, description, useraccess) 
+SELECT '<<pcSettingName>>', '<<pcSettingValue>>', '<<pcDescription>>', '<<pcUserAccess>>' 
+WHERE NOT EXISTS (SELECT * 
+ FROM settings
+WHERE settingname = '<<pcSettingName>>')
+ENDTEXT
+
+llReturn = RunSQL(lcSQL)
+
+RETURN (llReturn)
+* EOF
+
+FUNCTION ConvertPhotos
+LOCAL lcSQL
+
+IF NOT DIRECTORY('JPG')
+	MD JPG
+ENDIF
+
+WAIT 'Opening database...' WINDOW NOWAIT 
+
+USE data\eschool!registerfull
+SCAN FOR NOT ISNULL(photo)
+
+	WAIT WINDOW 'Now converting ' + TRANSFORM(RECNO()) + '/' + TRANSFORM(RECCOUNT()) NOWAIT 
+
+	=STRTOFILE(CHR(13) + 'Converting ' + TRANSFORM(admno),'convert.txt',1)
+
+	=Save2BMP()
+
+	lcBMPFile = TRANSFORM(admno) + '.BMP'
+	
+	IF FILE(lcBMPFile)
+		lcJPGFile = 'JPG\' + TRANSFORM(rowid) + '.JPG'
+		=BMP2JPG(lcBMPFile, lcJPGFile)
+		
+		ERASE (lcBMPFile)
+		=STRTOFILE('.. done. ','convert.txt',1)
+	ENDIF
+
+ENDSCAN
+USE
+
+WAIT CLEAR
+
+RETURN
+
+
+FUNCTION Save2BMP
+
+*SELECT photo_register
+COPY NEXT 1 TO temp FIELDS photo
+
+lcFile = ALLTRIM(STR(admno))+'.BMP'
+
+*** Open two files, "temp.fpt" contains the physical BMP data.
+  *** and Create a file handle for the output file "Test.Bmp"
+
+  handlein=FOPEN("temp.fpt")
+  handleout=FCREATE(lcFile)
+
+  *** To determine the length of the Input file "Temp.fpt"
+  gnEnd = FSEEK(handlein, 0, 2)
+  gnTop = FSEEK(handlein, 0)
+
+  *** Store the whole file into a string "str1"
+  str1 = FREAD(handlein, gnEnd)
+
+  *** Offset 599 bytes from Str1 and save it to "str2"
+  str2=RIGHT(str1,LEN(str1)-599)
+
+  *** Write "Str2" into the BMP file "Test.BMP"
+  n=FWRITE(handleout,str2)
+
+  *** Close both opened files
+  =FCLOSE(handlein)
+  =FCLOSE(handleout)
+
+IF FILE('temp.dbf')
+	USE IN SELECT('temp')
+	ERASE temp.dbf
+	ERASE temp.fpt
+ENDIF
+
+RETURN

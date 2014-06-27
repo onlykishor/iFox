@@ -1,0 +1,3 @@
+FOR i = 1 TO 254
+	=FCLOSE(i)
+ENDFOR

@@ -1,0 +1,70 @@
+DEFINE CLASS Student AS Custom
+
+FUNCTION GetTotalFee
+PARAMETERS pnAdmno, pdDate
+	LOCAL lReturn, lnSelect, lcTempFile, lnTotalFee, lcFilter
+	
+	lnSelect = SELECT()
+	lcTempFile = GetUniqueFileName()
+	lnTotalFee = 0.00
+	lcFilter = ''
+	
+	IF NOT EMPTY(pdDate)
+		lcFilter = " AND a.date <= " + SQLFormTT(pdDate)
+	ENDIF
+
+	TEXT TO lcSQL NOSHOW TEXTMERGE
+	SELECT SUM(amount) as totalfee
+	  FROM studentfee a
+	  JOIN register reg
+	    ON reg.admno = a.admno
+	 WHERE a.admno = <<pnAdmno>> 
+	   AND a.registerid = <<xRegisterID>>
+	   AND reg.registerid = <<xRegisterID>>
+	   <<lcFilter>>
+	 ORDER BY a.date
+	ENDTEXT
+	
+	lReturn = RunSQL(lcSQL, lcTempFile)
+	lReturn = lReturn AND USED(lcTempFile) AND RECCOUNT(lcTempFile) > 0
+	IF lReturn 
+		lnTotalFee = EVALUATE(lcTempFile + '.totalfee')
+	ENDIF
+	USE IN SELECT(lcTempFile)
+	
+	SELECT (lnSelect)
+	RETURN lnTotalFee
+ENDFUNC 
+
+FUNCTION GetFeeBalance
+PARAMETERS pnAdmno
+	LOCAL lReturn, lnSelect, lcTempFile
+	
+	lnSelect = SELECT()
+	lcTempFile = GetUniqueFileName()
+
+	TEXT TO lcSQL NOSHOW TEXTMERGE
+	SELECT a.admno, reg.name, a.receipt, a.date, RTRIM(a.netamount) AS netamount, a.descri
+	  FROM fee a
+	  JOIN register reg
+	    ON reg.admno = a.admno
+	  JOIN fbooks f
+	    ON f.registerid = reg.registerid
+	   AND f.bookid = a.bookid
+	 WHERE a.admno = <<pnAdmno>> 
+	   AND reg.registerid = <<xRegisterID>>
+	 ORDER BY a.date
+	ENDTEXT
+	
+	lReturn = RunSQL(lcSQL, lcTempFile)
+	lReturn = lReturn AND USED(lcTempFile) AND RECCOUNT(lcTempFile) > 0
+	IF lReturn 
+		lnBalance = x
+	ENDIF
+
+	SELECT (lnSelect)
+
+	RETURN lReturn
+ENDFUNC 
+
+ENDDEFINE 

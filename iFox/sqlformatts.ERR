@@ -1,0 +1,3 @@
+lxWorking = IIF(EMPTY(NVL(lxDateTime,{//})),{1/1/1900},lxDateTime)
+Error in line 9: Ambiguous date/datetime constant. Use the format:
+  {^yyyy-mm-dd[,][hh[:mm[:ss]] [a|p]]}

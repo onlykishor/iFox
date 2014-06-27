@@ -1,0 +1,11 @@
+<?xml version = "1.0" encoding="Windows-1252" standalone="yes"?>
+<VFPData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.microsoft.com/mySchema.xsd">
+	<suppliers>
+		<supplierid>1</supplierid>
+		<supplier>TEST SUPPLIER</supplier>
+		<address/>
+		<contactnam>AAAA</contactnam>
+		<phone>1234</phone>
+		<tin>TTTAAA</tin>
+	</suppliers>
+</VFPData>

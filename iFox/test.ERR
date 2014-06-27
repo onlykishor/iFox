@@ -1,0 +1,30 @@
+RETURN
+Error in line 30: Statement is not in a procedure.
+lcMessage = 'Dear Parent, T:<<T>>/10, H:<<H>>/10, E:<<E>>/10, M:<<M>>/10, TA:<<T>>'
+Error in line 32: Statement is not in a procedure.
+lnFields = 4
+Error in line 35: Statement is not in a procedure.
+T='55 '
+Error in line 36: Statement is not in a procedure.
+E='66 '
+Error in line 37: Statement is not in a procedure.
+H='77 '
+Error in line 38: Statement is not in a procedure.
+M='88 '
+Error in line 39: Statement is not in a procedure.
+ASSERT .f.
+Error in line 41: Statement is not in a procedure.
+FOR i = 1 TO lnFields
+Error in line 44: Statement is not in a procedure.
+lcField = STREXTRACT(lcMessage, '<<','>>', i)
+Error in line 45: Statement is not in a procedure.
+IF NOT EMPTY(lcField)
+Error in line 46: Statement is not in a procedure.
+lcMessage = STRTRAN(lcMessage, '<<'+lcField+'>>', '<<ALLTRIM(&lcField)>>',1,1,1)
+Error in line 47: Statement is not in a procedure.
+ENDIF
+Error in line 48: Statement is not in a procedure.
+ENDFOR
+Error in line 49: Statement is not in a procedure.
+?TEXTMERGE(lcMessage)
+Error in line 50: Statement is not in a procedure.

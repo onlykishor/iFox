@@ -1,0 +1,1 @@
+http://sms.ifox.in/WebserviceSMS.aspx?user=<<username>>&passwd=<<passwd>>&mobilenumber=<<mobilenumber>>&message=<<messagetext>>&sid=DNRCA

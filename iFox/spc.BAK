@@ -1,0 +1,19 @@
+lcText = 'dear parent kishore kumar      , your ward   testing    a'
+
+llSpace = .F.
+lnLen = LEN(lcText)
+FOR i=1 TO lnLen
+	
+	IF SUBSTR(lcText,i,1) = ' '
+		IF NOT llSpace
+			lcText = lcText + SUBSTR(lcText,i,1)
+			llSpace = .T.
+		ENDIF 
+	ELSE
+		lcText = lcText + SUBSTR(lcText,i,1)
+		llSpace = .F.
+	ENDIF
+
+ENDFOR
+
+?lcText
